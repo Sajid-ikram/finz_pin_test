@@ -1,0 +1,98 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- For the Sandbox environment -->
+    <script src="https://sandbox.weavr.io/app/secure/static/client.1.js"></script>
+    <style>
+      body {
+        background-color: #0a0a0d;
+        font-family: "Montserrat";
+        margin: 0;
+      }
+
+      input[type="submit"] {
+        border: none;
+        border-radius: 0px;
+        width: 100%;
+        height: 44px;
+        font-size: 17px;
+        font-weight: 600;
+        background-color: #f1bf68;
+        color: #0a0a0d;
+        position: absolute;
+        bottom: 0;
+      }
+      input[type="submit"]:hover {
+        background-color: #c0964e;
+      }
+      .passcodeDiv {
+        border-radius: 10px;
+        width: 100%;
+        height: 45px;
+        background-color: #1c1c1e;
+      }
+      .passcodeDiv iframe {
+        height: 100% !important;
+      }
+      .passcodeDiv iframe #secure-element {
+        height: 100% !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="passcode" class="passcodeDiv"></div>
+    <!-- <form onSubmit="onSubmit(); return false;">
+      Username: <input type="input" name="u" tabindex="-1" /><br />
+      Passcode:
+      <div id="passcode">
+        <input type="input" id="passCode" name="passCode" />
+      </div>
+      <br />
+      <input id="submit" type="button" value="Login" />
+    </form> -->
+
+    <script type="text/javascript">
+      // fetch("pin.json")
+      //   .then((response) => response.json())
+      //   .then((data) => {
+      //     console.log(data.key);
+          
+      //   });
+        const key  = 'lvRctPs146kBfZZMa7MACQ=='
+      window.OpcUxSecureClient.init(key);
+
+      var form = window.OpcUxSecureClient.form();
+
+      var input = form.input("passcode", "passCode", {
+        style: {
+          base: {
+            "::placeholder": {
+              fontSize: "16px",
+              lineHeight: "45px",
+            },
+            fontSize: "32px",
+            textAlign: "center",
+            color: "#C4C4C4",
+            lineHeight: "45px",
+            letterSpacing: "8px",
+          },
+        },
+      });
+
+      input.mount(document.getElementById("passcode"));
+      function onSubmit() {
+        form.tokenize(function (tokens) {
+          console.log("token:" + tokens["passcode"]);
+        });
+      }
+
+      // document.getElementById("passCode").focus(); // Added
+
+      // window.onload = function () {
+      //   document.getElementById("passCode").focus(); // Added
+      //   console.log("Hello World");
+      //   alert("Hello World");
+      // };
+    </script>
+  </body>
+</html>

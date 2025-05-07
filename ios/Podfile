@@ -1,0 +1,34 @@
+# ios/Podfile
+
+platform :ios, '15.0'
+
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+project 'Runner', {
+  'Debug' => :debug,
+  'Profile' => :release,
+  'Release' => :release,
+}
+
+def flutter_install_all_ios_pods(flutter_application_path)
+  pod 'Flutter', :path => File.join(flutter_application_path, '.ios', 'Flutter', 'engine')
+  pod 'FlutterPluginRegistrant', :path => File.join(flutter_application_path, '.ios', 'Flutter', 'FlutterPluginRegistrant')
+  Dir.glob(File.join(flutter_application_path, '.ios', 'Flutter', 'Generated.xcconfig')) do |xcconfig_path|
+    install_flutter_engine_pod(xcconfig_path)
+  end
+end
+
+target 'Runner' do
+  use_frameworks!  # Required for Swift plugins
+
+  flutter_install_all_ios_pods(File.dirname(File.realpath(__FILE__)))
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['SWIFT_VERSION'] = '5.0'
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
+    end
+  end
+end
