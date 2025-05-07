@@ -50,5 +50,7 @@
     <true/>
     <key>NSAllowsLocalNetworking</key>
     <true/>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
 </dict>
 </plist>

@@ -49,34 +49,34 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late InAppWebViewController _controller;
 
+
   InAppWebView _buildWebview() {
     return InAppWebView(
-      onWebViewCreated: (webViewController) {
-        _controller = webViewController;
-
-        _controller.loadFile(assetFilePath: "assets/pin_dev.html");
-      },
-      initialOptions: InAppWebViewGroupOptions(
-        crossPlatform: InAppWebViewOptions(
-          useShouldOverrideUrlLoading: true,
-          mediaPlaybackRequiresUserGesture: false,
-        ),
-        android: AndroidInAppWebViewOptions(useHybridComposition: true),
-        ios: IOSInAppWebViewOptions(allowsInlineMediaPlayback: true),
+      initialFile: 'assets/pin_dev.html',
+      initialSettings: InAppWebViewSettings(
+        javaScriptEnabled: true,
+        mediaPlaybackRequiresUserGesture: false,
+        allowsInlineMediaPlayback: true,
+        useShouldOverrideUrlLoading: true,
+        useHybridComposition: true,
       ),
-      onProgressChanged: (controller, progress) {
-        if (progress == 100) {}
-        print('progress: $progress ---------------------------------------');
+      onWebViewCreated: (controller) {
+        _controller = controller;
       },
-      onConsoleMessage: (webViewController, consoleMessage) {
-        String message = consoleMessage.message;
+      onProgressChanged: (controller, progress) {
+        log('progress: $progress ---------------------------------------');
+        if (progress == 100) {
+          // Page fully loaded
+        }
+      },
+      onReceivedError: (controller, request, error) {
+        log('error: $error ---------------------------------------');
+      },
+      onConsoleMessage: (controller, consoleMessage) {
+        final message = consoleMessage.message;
         log('message: $message');
         if (message.startsWith('token:')) {
-          /*ref.read(pinUiComponentNotifier.notifier).tokenizePinAndSubmit(
-            arguments: widget.passcodeArguments,
-            consoleMessage: consoleMessage,
-          );*/
-          print('message: $message ++++++++++++++++++++++++');
+          log('message: $message ++++++++++++++++++++++++');
         }
       },
       onReceivedServerTrustAuthRequest: (controller, challenge) async {
@@ -87,7 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  @override
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Flutter Demo Home Page')),
